@@ -394,3 +394,96 @@ export function getZodiacSign(birthday) {
   const index = (year - 4) % 12;
   return zodiacSigns[index];
 }
+// 发送事件
+export function sendEvent (eventName,data){
+  var myEvent = new Event(eventName);
+  myEvent.data = data;
+  window.dispatchEvent(myEvent);
+}
+// 注册事件，传入函数方便使用
+export function registerAgentStatusListener(status,handler) {
+  return new Promise((resolve, reject) => {
+    try {
+      if (typeof handler == "function") {
+        window.addEventListener(status, handler);
+        resolve(callback(0));
+      } else {
+        reject(callback(6001));
+        Log.w("registerAgentStatusListener param is not a function");
+      }
+    } catch (e) {
+      Log.w("registerAgentStatusListener", e);
+      reject(callback(6001));
+    }
+  });
+}
+// 取消事件
+export function unRegisterAgentStatusListener(status,handler) {
+  return new Promise((resolve, reject) => {
+    try {
+      if (typeof handler == "function") {
+        window.removeEventListener(status, handler);
+        resolve(callback(0));
+      } else {
+        reject(callback(6001));
+        Log.w("unRegisterAgentStatusListener param is not a function");
+      }
+    } catch (e) {
+      Log.w("unRegisterAgentStatusListener", e);
+      reject(callback(6001));
+    }
+  });
+}
+// 错误回调函数
+export function callback (code, msg) {
+  if (code == 6000) {
+    msg = "请求异常";
+  } else if (code == 6001) {
+    msg = "缺少必要请求参数";
+  } else if (code == 6002) {
+    msg = "操作时序错误";
+  } else if (code == 8000) {
+    msg = "butel错误";
+  } else if (code == 0) {
+    msg = "success";
+  } else{
+    msg = "未知错误";
+  }
+  return {
+    code,
+    msg,
+  };
+}
+// 获取当前时间
+export function getNowFormatDate() {
+  var date = new Date();
+  var hengGang = "-";
+  var maoHao = ":";
+  var month = date.getMonth() + 1;
+  var curDate = date.getDate();
+  var curHours = date.getHours();
+  var curMinutes = date.getMinutes();
+  var curSeconds = date.getSeconds();
+
+  if (month >= 1 && month <= 9) {
+    month = "0" + month;
+  }
+  if (curDate >= 0 && curDate <= 9) {
+    curDate = "0" + curDate;
+  }
+  if (curHours >= 0 && curHours <= 9) {
+    curHours = "0" + curHours;
+  }
+  if (curMinutes >= 0 && curMinutes <= 9) {
+    curMinutes = "0" + curMinutes;
+  }
+  if (curSeconds >= 0 && curSeconds <= 9) {
+    curSeconds = "0" + curSeconds;
+  }
+
+  var currentdate = date.getFullYear() + hengGang + month + hengGang + curDate +
+    " " + curHours + maoHao + curMinutes +
+    maoHao + curSeconds;
+
+  return currentdate;
+}
