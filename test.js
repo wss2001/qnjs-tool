@@ -1,4 +1,4 @@
-import { testAdd, getZodiacSign, registerAgentStatusListener, Log} from './index.js';
+import { testAdd, getZodiacSign, registerAgentStatusListener, Log,calculateProgress} from './index.js';
 let a = testAdd(1,2);
 let b = getZodiacSign('2001-06-15')
 console.log(a,b);
@@ -9,3 +9,6 @@ registerAgentStatusListener('jhh').then(res=>{
   Log.e('err1'+err)
   console.log('err',err)
 })
+
+const progress = calculateProgress();
+console.log(progress);

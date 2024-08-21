@@ -487,3 +487,60 @@ export function getNowFormatDate() {
 
   return currentdate;
 }
+
+export function calculateProgress() {
+  const now = new Date();
+  // 今日进度
+  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+  const dayProgress = ((now - startOfDay) / (endOfDay - startOfDay) * 100).toFixed(2);
+  // 本周进度
+  const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay());
+  const endOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() + (7 - now.getDay()));
+  const weekProgress = ((now - startOfWeek) / (endOfWeek - startOfWeek) * 100).toFixed(2);
+  // 本月进度
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  const monthProgress = ((now - startOfMonth) / (endOfMonth - startOfMonth) * 100).toFixed(2);
+  // 今年进度
+  const startOfYear = new Date(now.getFullYear(), 0, 1);
+  const endOfYear = new Date(now.getFullYear() + 1, 0, 1);
+  const yearProgress = ((now - startOfYear) / (endOfYear - startOfYear) * 100).toFixed(2);
+  // 下班倒计时（假设下班时间为17:30）
+  const endOfWorkDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 15);
+  let workCountdown = endOfWorkDay - now;
+  if (workCountdown < 0) workCountdown = 0;  // 如果已经下班，倒计时为0
+  const hoursLeft = Math.floor(workCountdown / (1000 * 60 * 60));
+  const minutesLeft = Math.floor((workCountdown % (1000 * 60 * 60)) / (1000 * 60));
+  const secondsLeft = Math.floor((workCountdown % (1000 * 60)) / 1000);
+  const workCountdownStr = `${hoursLeft}小时${minutesLeft}分${secondsLeft}秒`;
+  // 周末倒计时（假设周末从周六开始）
+  const startOfWeekend = new Date(now.getFullYear(), now.getMonth(), now.getDate() + (6 - now.getDay()));
+  const weekendCountdown = startOfWeekend - now;
+  const daysToWeekend = Math.floor(weekendCountdown / (1000 * 60 * 60 * 24));
+  const hoursToWeekend = Math.floor((weekendCountdown % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const weekendCountdownStr = `${daysToWeekend}天${hoursToWeekend}小时`;
+  // 退休进度（假设退休年为2065年1月1日）
+  const retirementYear = 2065;
+  const startOfRetirement = new Date(retirementYear, 0, 1);
+  const startOfCareer = new Date(now.getFullYear(), 0, 1);
+  const retirementProgress = ((now - startOfCareer) / (startOfRetirement - startOfCareer) * 100).toFixed(2);
+    console.log(`今日进度: ${dayProgress}%`);
+    console.log(`本周进度: ${weekProgress}%`);
+    console.log(`本月进度: ${monthProgress}%`);
+    console.log(`今年进度: ${yearProgress}%`);
+    console.log(`下班倒计时: ${workCountdownStr}`);
+    console.log(`周末倒计时: ${weekendCountdownStr}`);
+    console.log(`我的退休进度: ${retirementProgress}%`);
+  return {
+      todayProgress: `${dayProgress}%`,
+      weekProgress: `${weekProgress}%`,
+      monthProgress: `${monthProgress}%`,
+      yearProgress: `${yearProgress}%`,
+      workCountdown: workCountdownStr,
+      weekendCountdown: weekendCountdownStr,
+      retirementProgress: `${retirementProgress}%`
+  };
+}
+const progress = calculateProgress();
+console.log(progress);
