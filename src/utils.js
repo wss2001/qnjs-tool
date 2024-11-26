@@ -542,5 +542,35 @@ export function calculateProgress() {
       retirementProgress: `${retirementProgress}%`
   };
 }
-const progress = calculateProgress();
-console.log(progress);
+// 随机生成几位数
+export function randomCode(num) {
+  let ranCode = "";
+  let index = "";
+  //设置随机字符
+  let random = new Array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+  for (let i = 0; i < num; i++) {
+    index = Math.floor(Math.random() * 10);
+    //字符串拼接 将每次随机的字符 进行拼接
+    ranCode += random[index];
+  }
+  return ranCode;
+}
+// 禁止输入特殊字符，替换使用 @input="e => (orderId= noSpecialCode(e,3))"
+export function noSpecialCode(e, type) {
+  let pattern = "";
+  switch (type) {
+    case 1:
+      pattern = /[\D]*/g;
+      break;
+    case 2:
+      pattern = /[^A-Z\d]*/g;
+      break;
+    case 3:
+      pattern = /[^0-9A-Za-z]*/g;
+      break;
+    default:
+      pattern = /[^0-9A-Za-z\u4e00-\u9fa5]*/g;
+      break;
+  }
+  return e.replace(pattern, "");
+}
